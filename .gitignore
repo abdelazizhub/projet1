@@ -1,0 +1,24 @@
+# Environnements virtuels
+venv/
+.env
+
+# Fichiers Python compilés
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers de logs et caches
+logs/
+*.log
+
+# Fichiers volumineux
+data/
+models/
+Data set/
+notebooks/
+test_df.csv
+test_df_cleaned.csv
+test_df_nan.csv
+train_df.csv
+train_df_cleaned.csv
+train_df_nan.csv
