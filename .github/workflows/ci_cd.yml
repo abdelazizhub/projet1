@@ -3,59 +3,37 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main  # Exécute le workflow à chaque push sur la branche main
+      - main
   pull_request:
     branches:
-      - main  # Vérifie les PR avant fusion
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Cloner le dépôt
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🐍 Configurer Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      - name: 🔄 Supprimer les anciennes versions de scikit-learn et imbalanced-learn
-        run: |
-          pip uninstall -y scikit-learn imbalanced-learn
-          pip install scikit-learn==1.5.2 imbalanced-learn==0.12.4
-  
-      - name: 📦 Installer les dépendances
+          python-version: "3.9"
+
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest
 
-      - name: 📂 Lister les fichiers du projet
-        run: ls -R
-
-      - name: 📂 Vérifier les fichiers du modèle
-        run: ls -R mlflow_model/
-
-      - name: 🧪 Exécuter les tests avec Pytest
+      - name: Run FastAPI
         run: |
-          pytest tests/
+          nohup uvicorn src.api:app --host 127.0.0.1 --port 8000 &
 
-  deploy:
-    needs: test  # Ne déploie que si les tests passent
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: 📥 Cloner le dépôt
-        uses: actions/checkout@v4
-
-      - name: 🔐 Connexion à AWS (ou autre plateforme)
+      - name: Run Streamlit
         run: |
-          echo "Déploiement à configurer (AWS, Render, ou autre)"
+          nohup streamlit run src/Dashboard.py &
 
-      - name: 🚀 Déployer l'API
-        run: |
-          uvicorn src.api:app --host 0.0.0.0 --port 8000 &
-
-      - name: 🚀 Déployer le Dashboard
-        run: |
-          streamlit run src/dashboard.py
+      - name: Run Pytest
+        run: pytest tests/
