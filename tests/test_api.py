@@ -1,6 +1,12 @@
 from fastapi.testclient import TestClient
 from src.api import app  # Assurez-vous que cet import fonctionne
 
+from fastapi.testclient import TestClient
+from starlette.applications import Starlette
+
+# Assurez-vous que app est bien une instance de FastAPI
+app = app if isinstance(app, Starlette) else app
+
 client = TestClient(app)
 
 def test_read_root():

@@ -13,5 +13,5 @@ shap==0.43.0
 streamlit==1.28.2
 uvicorn==0.24.0
 pytest>=8.0.0
-httpx
-starlette
+httpx==0.27.0
+starlette==0.27.0
