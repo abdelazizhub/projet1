@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 from src.api import app  # Assurez-vous que cet import fonctionne
 
-client = TestClient(app=app)
+client = TestClient(app)
 
 def test_read_root():
     """Vérifie que l'endpoint racine retourne le bon message."""
